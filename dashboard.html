@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Status Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'custom-purple': '#667eea',
+                        'custom-purple-dark': '#764ba2',
+                        'custom-gray-dark': '#2d3748',
+                        'custom-gray': '#4a5568',
+                        'custom-gray-light': '#718096',
+                        'custom-green': '#48bb78',
+                        'custom-green-dark': '#38a169',
+                        'custom-blue': '#4299e1',
+                        'custom-blue-dark': '#3182ce'
+                    },
+                    animation: {
+                        'progress-fill': 'progressFill 2s ease-in-out',
+                        'pulse-green': 'pulseGreen 2s infinite',
+                        'slide-in': 'slideIn 0.5s ease-out',
+                        'fade-in-up': 'fadeInUp 0.6s ease-out'
+                    },
+                    keyframes: {
+                        progressFill: {
+                            'from': { width: '0%' },
+                            'to': { width: '60%' }
+                        },
+                        pulseGreen: {
+                            '0%': { boxShadow: '0 0 0 0 rgba(72, 187, 120, 0.7)' },
+                            '70%': { boxShadow: '0 0 0 10px rgba(72, 187, 120, 0)' },
+                            '100%': { boxShadow: '0 0 0 0 rgba(72, 187, 120, 0)' }
+                        },
+                        slideIn: {
+                            'from': {
+                                opacity: '0',
+                                transform: 'translateY(20px)'
+                            },
+                            'to': {
+                                opacity: '1',
+                                transform: 'translateY(0)'
+                            }
+                        },
+                        fadeInUp: {
+                            'from': {
+                                opacity: '0',
+                                transform: 'translateY(30px)'
+                            },
+                            'to': {
+                                opacity: '1',
+                                transform: 'translateY(0)'
+                            }
+                        }
+                    },
+                    backdropBlur: {
+                        'xs': '2px',
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .progress-fill {
+            animation: progressFill 2s ease-in-out;
+        }
+        
+        .stage-completed .stage-node {
+            animation: pulseGreen 2s infinite;
+        }
+        
+        .activity-item {
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        .glass-effect {
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+        
+        .stage:hover {
+            transform: translateY(-5px);
+        }
+        
+        .activity-item:hover {
+            transform: translateX(5px);
+        }
+        
+        .stage-active .stage-node {
+            box-shadow: 0 0 0 4px rgba(66, 153, 225, 0.3);
+        }
+
+        /* Mobile responsive progress line */
+        @media (max-width: 768px) {
+            .mobile-progress-line {
+                top: 25px;
+                left: 25px;
+                right: auto;
+                bottom: 0;
+                width: 4px;
+                height: auto;
+            }
+            
+            .mobile-progress-fill {
+                width: 100%;
+                height: 65%;
+            }
+        }
+
+        /* Fallback keyframes for older browsers */
+        @keyframes progressFill {
+            from { width: 0%; }
+            to { width: 60%; }
+        }
+        
+        @keyframes pulseGreen {
+            0% { box-shadow: 0 0 0 0 rgba(72, 187, 120, 0.7); }
+            70% { box-shadow: 0 0 0 10px rgba(72, 187, 120, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(72, 187, 120, 0); }
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-custom-purple to-custom-purple-dark min-h-screen p-5 md:p-10">
+    <div class="max-w-6xl mx-auto bg-white/95 glass-effect rounded-3xl shadow-2xl overflow-hidden">
+        <!-- Header Section -->
+        <div class="bg-gradient-to-r from-custom-gray-dark to-custom-gray text-white p-8 md:p-10 text-center">
+            <h1 class="text-3xl md:text-4xl font-bold mb-3">Project Alpha Dashboard</h1>
+            <p class="text-white/90 text-lg">Real-time project status and activity tracking</p>
+        </div>
+
+        <!-- Progress Section -->
+        <div class="bg-white p-8 md:p-10">
+            <h2 class="text-center text-custom-gray-dark text-2xl md:text-3xl font-semibold mb-12">Project Timeline</h2>
+            
+            <!-- Desktop Progress Container -->
+            <div class="hidden md:block relative max-w-4xl mx-auto">
+                <!-- Progress Line -->
+                <div class="absolute top-1/2 left-0 right-0 h-1 bg-gray-200 rounded-full transform -translate-y-1/2 z-0">
+                    <div class="progress-fill h-full bg-gradient-to-r from-custom-green to-custom-green-dark rounded-full w-3/5"></div>
+                </div>
+                
+                <!-- Stages -->
+                <div class="flex justify-between items-center relative z-10">
+                    <!-- Planning Stage -->
+                    <div class="stage stage-completed flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1">
+                        <div class="stage-node w-12 h-12 rounded-full bg-gradient-to-br from-custom-green to-custom-green-dark text-white font-bold flex items-center justify-center shadow-lg mb-4">
+                            ✓
+                        </div>
+                        <div class="text-custom-gray-dark font-semibold text-sm text-center w-20">Planning</div>
+                        <div class="text-custom-gray-light text-xs mt-1">Jan 15, 2025</div>
+                    </div>
+                    
+                    <!-- Design Stage -->
+                    <div class="stage stage-completed flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1">
+                        <div class="stage-node w-12 h-12 rounded-full bg-gradient-to-br from-custom-green to-custom-green-dark text-white font-bold flex items-center justify-center shadow-lg mb-4">
+                            ✓
+                        </div>
+                        <div class="text-custom-gray-dark font-semibold text-sm text-center w-20">Design</div>
+                        <div class="text-custom-gray-light text-xs mt-1">Feb 28, 2025</div>
+                    </div>
+                    
+                    <!-- Development Stage -->
+                    <div class="stage stage-active flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1">
+                        <div class="stage-node w-12 h-12 rounded-full bg-gradient-to-br from-custom-blue to-custom-blue-dark text-white font-bold flex items-center justify-center shadow-lg mb-4">
+                            3
+                        </div>
+                        <div class="text-custom-gray-dark font-semibold text-sm text-center w-20">Development</div>
+                        <div class="text-custom-gray-light text-xs mt-1">In Progress</div>
+                    </div>
+                    
+                    <!-- Testing Stage -->
+                    <div class="stage flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1">
+                        <div class="stage-node w-12 h-12 rounded-full bg-gray-400 text-white font-bold flex items-center justify-center shadow-lg mb-4">
+                            4
+                        </div>
+                        <div class="text-custom-gray-dark font-semibold text-sm text-center w-20">Testing</div>
+                        <div class="text-custom-gray-light text-xs mt-1">Aug 2025</div>
+                    </div>
+                    
+                    <!-- Launch Stage -->
+                    <div class="stage flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1">
+                        <div class="stage-node w-12 h-12 rounded-full bg-gray-400 text-white font-bold flex items-center justify-center shadow-lg mb-4">
+                            5
+                        </div>
+                        <div class="text-custom-gray-dark font-semibold text-sm text-center w-20">Launch</div>
+                        <div class="text-custom-gray-light text-xs mt-1">Sep 2025</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Mobile Progress Container -->
+            <div class="md:hidden space-y-8">
+                <!-- Mobile Progress Line Container -->
+                <div class="relative pl-8">
+                    <div class="mobile-progress-line absolute h-full w-1 bg-gray-200 rounded-full">
+                        <div class="mobile-progress-fill bg-gradient-to-b from-custom-green to-custom-green-dark rounded-full w-full"></div>
+                    </div>
+                    
+                    <!-- Mobile Stages -->
+                    <div class="space-y-10">
+                        <div class="stage stage-completed flex items-center relative z-10">
+                            <div class="stage-node w-12 h-12 rounded-full bg-gradient-to-br from-custom-green to-custom-green-dark text-white font-bold flex items-center justify-center shadow-lg mr-5">
+                                ✓
+                            </div>
+                            <div>
+                                <div class="text-custom-gray-dark font-semibold">Planning</div>
+                                <div class="text-custom-gray-light text-sm">Jan 15, 2025</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stage stage-completed flex items-center relative z-10">
+                            <div class="stage-node w-12 h-12 rounded-full bg-gradient-to-br from-custom-green to-custom-green-dark text-white font-bold flex items-center justify-center shadow-lg mr-5">
+                                ✓
+                            </div>
+                            <div>
+                                <div class="text-custom-gray-dark font-semibold">Design</div>
+                                <div class="text-custom-gray-light text-sm">Feb 28, 2025</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stage stage-active flex items-center relative z-10">
+                            <div class="stage-node w-12 h-12 rounded-full bg-gradient-to-br from-custom-blue to-custom-blue-dark text-white font-bold flex items-center justify-center shadow-lg mr-5">
+                                3
+                            </div>
+                            <div>
+                                <div class="text-custom-gray-dark font-semibold">Development</div>
+                                <div class="text-custom-gray-light text-sm">In Progress</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stage flex items-center relative z-10">
+                            <div class="stage-node w-12 h-12 rounded-full bg-gray-400 text-white font-bold flex items-center justify-center shadow-lg mr-5">
+                                4
+                            </div>
+                            <div>
+                                <div class="text-custom-gray-dark font-semibold">Testing</div>
+                                <div class="text-custom-gray-light text-sm">Aug 2025</div>
+                            </div>
+                        </div>
+                        
+                        <div class="stage flex items-center relative z-10">
+                            <div class="stage-node w-12 h-12 rounded-full bg-gray-400 text-white font-bold flex items-center justify-center shadow-lg mr-5">
+                                5
+                            </div>
+                            <div>
+                                <div class="text-custom-gray-dark font-semibold">Launch</div>
+                                <div class="text-custom-gray-light text-sm">Sep 2025</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Activity Section -->
+        <div class="bg-gray-50 p-8 md:p-10">
+            <h2 class="text-center text-custom-gray-dark text-2xl md:text-3xl font-semibold mb-10">Recent Activity</h2>
+            
+            <div class="max-w-4xl mx-auto space-y-5">
+                <!-- High Priority Activity -->
+                <div class="activity-item bg-white rounded-2xl p-6 shadow-lg border-l-4 border-red-500 transition-all duration-300 hover:translate-x-1 hover:shadow-xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center">
+                            <div class="w-9 h-9 bg-gradient-to-br from-custom-purple to-custom-purple-dark rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">
+                                SM
+                            </div>
+                            <div class="text-custom-gray-dark font-semibold">Sarah Martinez</div>
+                        </div>
+                        <div class="text-custom-gray-light text-sm">2 hours ago</div>
+                    </div>
+                    <div class="text-custom-gray leading-relaxed">
+                        Fixed critical bug in user authentication module. All login flows are now working correctly across all browsers.
+                        <div class="inline-block mt-2 px-3 py-1 bg-red-100 text-red-800 text-xs font-semibold rounded-full">
+                            High Priority
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medium Priority Activity -->
+                <div class="activity-item bg-white rounded-2xl p-6 shadow-lg border-l-4 border-orange-500 transition-all duration-300 hover:translate-x-1 hover:shadow-xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center">
+                            <div class="w-9 h-9 bg-gradient-to-br from-custom-purple to-custom-purple-dark rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">
+                                DJ
+                            </div>
+                            <div class="text-custom-gray-dark font-semibold">David Johnson</div>
+                        </div>
+                        <div class="text-custom-gray-light text-sm">5 hours ago</div>
+                    </div>
+                    <div class="text-custom-gray leading-relaxed">
+                        Updated API documentation with new endpoints. Added comprehensive examples for the payment integration module.
+                        <div class="inline-block mt-2 px-3 py-1 bg-orange-100 text-orange-800 text-xs font-semibold rounded-full">
+                            Medium Priority
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Low Priority Activity -->
+                <div class="activity-item bg-white rounded-2xl p-6 shadow-lg border-l-4 border-green-500 transition-all duration-300 hover:translate-x-1 hover:shadow-xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center">
+                            <div class="w-9 h-9 bg-gradient-to-br from-custom-purple to-custom-purple-dark rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">
+                                AL
+                            </div>
+                            <div class="text-custom-gray-dark font-semibold">Alex Liu</div>
+                        </div>
+                        <div class="text-custom-gray-light text-sm">1 day ago</div>
+                    </div>
+                    <div class="text-custom-gray leading-relaxed">
+                        Completed mobile responsive design for dashboard components. All screens now adapt perfectly to different device sizes.
+                        <div class="inline-block mt-2 px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">
+                            Low Priority
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Medium Priority Activity -->
+                <div class="activity-item bg-white rounded-2xl p-6 shadow-lg border-l-4 border-orange-500 transition-all duration-300 hover:translate-x-1 hover:shadow-xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center">
+                            <div class="w-9 h-9 bg-gradient-to-br from-custom-purple to-custom-purple-dark rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">
+                                MK
+                            </div>
+                            <div class="text-custom-gray-dark font-semibold">Maria Kim</div>
+                        </div>
+                        <div class="text-custom-gray-light text-sm">2 days ago</div>
+                    </div>
+                    <div class="text-custom-gray leading-relaxed">
+                        Performance optimization completed. Page load times reduced by 40% through code splitting and lazy loading implementation.
+                        <div class="inline-block mt-2 px-3 py-1 bg-orange-100 text-orange-800 text-xs font-semibold rounded-full">
+                            Medium Priority
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Low Priority Activity -->
+                <div class="activity-item bg-white rounded-2xl p-6 shadow-lg border-l-4 border-green-500 transition-all duration-300 hover:translate-x-1 hover:shadow-xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <div class="flex items-center">
+                            <div class="w-9 h-9 bg-gradient-to-br from-custom-purple to-custom-purple-dark rounded-full flex items-center justify-center text-white font-bold text-sm mr-3">
+                                RC
+                            </div>
+                            <div class="text-custom-gray-dark font-semibold">Robert Chen</div>
+                        </div>
+                        <div class="text-custom-gray-light text-sm">3 days ago</div>
+                    </div>
+                    <div class="text-custom-gray leading-relaxed">
+                        Added automated testing suite for user interface components. Coverage increased to 85% with comprehensive unit tests.
+                        <div class="inline-block mt-2 px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full">
+                            Low Priority
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Add interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            // Animate activity items on scroll
+            const observerOptions = {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            };
+
+            const observer = new IntersectionObserver(function(entries) {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.style.animationDelay = Math.random() * 0.3 + 's';
+                        entry.target.classList.add('animate-fade-in-up');
+                    }
+                });
+            }, observerOptions);
+
+            document.querySelectorAll('.activity-item').forEach(item => {
+                observer.observe(item);
+            });
+
+            // Add click interaction to stages
+            document.querySelectorAll('.stage').forEach(stage => {
+                stage.addEventListener('click', function() {
+                    const label = this.querySelector('.text-custom-gray-dark, .font-semibold').textContent;
+                    console.log(`Clicked on stage: ${label}`);
+                    
+                    // Add temporary highlight effect
+                    this.style.transform = 'translateY(-8px) scale(1.05)';
+                    setTimeout(() => {
+                        this.style.transform = '';
+                    }, 200);
+                });
+            });
+
+            // Simulate real-time updates
+            setTimeout(() => {
+                const progressFill = document.querySelector('.progress-fill');
+                if (progressFill) {
+                    progressFill.style.width = '75%';
+                }
+                const mobileProgressFill = document.querySelector('.mobile-progress-fill');
+                if (mobileProgressFill) {
+                    mobileProgressFill.style.height = '75%';
+                }
+            }, 3000);
+        });
+    </script>
+</body>
+</html>
