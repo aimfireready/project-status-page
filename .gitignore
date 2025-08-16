@@ -1,0 +1,12 @@
+# Configuration files with sensitive data
+asana-config.php
+
+# IDE and system files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*~
+
+# Logs
+*.log

@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Onboarding Status</title>
+    <title>Tech Onboarding</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -139,66 +139,77 @@
     <div class="max-w-6xl mx-auto bg-white/95 glass-effect rounded-3xl shadow-2xl overflow-hidden">
         <!-- Header Section -->
         <div class="bg-gradient-to-r from-gray-800 to-gray-600 text-white p-8 md:p-10 text-center">
-            <h1 class="text-3xl md:text-4xl font-bold mb-3">Project Status Page v1</h1>
-            <p class="text-white/90 text-lg">Real-time project status and activity tracking</p>
+            <h1 class="text-3xl md:text-4xl font-bold mb-3">New Hire Onboarding: <span id="employee-name">Loading...</span></h1>
+            <p class="text-white/90 text-lg"><span id="employee-position">Loading...</span> • <span id="employee-location" class="px-2 py-1 rounded text-sm">Loading...</span> • Starts <span id="employee-start-date">Loading...</span></p>
         </div>
 
-        <!-- Progress Section -->
+        <!-- Timeline Section -->
         <div class="bg-white p-8 md:p-10">
-            <!-- <h2 class="text-center text-gray-800 text-2xl md:text-3xl font-semibold mb-12">Project Timeline</h2> -->
+            <h2 class="text-center text-gray-800 text-xl md:text-2xl font-semibold mb-8">Technology Setup Progress</h2>
             
-            <!-- Desktop Progress Container -->
-            <div class="hidden md:block relative max-w-4xl mx-auto">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Employee Selector Sidebar -->
+                <div class="lg:w-40 lg:flex-shrink-0">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-4">Select Employee</h3>
+                    <ul id="employee-selector" class="space-y-2 lg:space-y-2 flex lg:flex-col flex-wrap gap-2 lg:gap-0">
+                        <li class="text-center text-gray-500 py-2">Loading employees...</li>
+                    </ul>
+                </div>
+                
+                <!-- Timeline Container -->
+                <div class="flex-1">
+                    <!-- Desktop Progress Container -->
+                    <div class="hidden md:block relative max-w-4xl mx-auto">
                 <!-- Progress Line -->
                 <div class="absolute top-6 left-0 right-0 h-1 bg-gray-200 rounded-full z-0">
-                    <div class="progress-fill h-full bg-gradient-to-r from-green-500 to-green-600 rounded-full w-3/5"></div>
+                    <div id="progress-bar" class="progress-fill h-full bg-gradient-to-r from-green-500 to-green-600 rounded-full w-0"></div>
                 </div>
                 
                 <!-- Stages -->
-                <div class="flex justify-between items-center relative z-10">
-                    <!-- Planning Stage -->
-                    <div class="stage stage-completed flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1">
-                        <div class="stage-node w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-green-600 text-white font-bold flex items-center justify-center shadow-lg mb-4">
-                            ✓
+                <div class="flex items-center relative z-10">
+                    <!-- Offer Accepted -->
+                    <div id="stage-offer" class="stage flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1 flex-1">
+                        <div class="stage-node w-12 h-12 rounded-full bg-gray-400 text-white font-bold flex items-center justify-center shadow-lg mb-4">
+                            1
                         </div>
-                        <div class="text-gray-800 font-semibold text-md text-center w-20">Planning</div>
-                        <div class="text-gray-500 text-xs mt-1">Jan 15, 2025</div>
+                        <div class="text-gray-800 font-semibold text-md text-center">Offer Accepted</div>
+                        <div class="text-gray-500 text-xs mt-1">Loading...</div>
                     </div>
                     
-                    <!-- Design Stage -->
-                    <div class="stage stage-completed flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1">
-                        <div class="stage-node w-12 h-12 rounded-full bg-gradient-to-br from-green-500 to-green-600 text-white font-bold flex items-center justify-center shadow-lg mb-4">
-                            ✓
+                    <!-- Microsoft Account -->
+                    <div id="stage-microsoft" class="stage flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1 flex-1">
+                        <div class="stage-node w-12 h-12 rounded-full bg-gray-400 text-white font-bold flex items-center justify-center shadow-lg mb-4">
+                            2
                         </div>
-                        <div class="text-gray-800 font-semibold text-md text-center w-20">Design</div>
-                        <div class="text-gray-500 text-xs mt-1">Feb 28, 2025</div>
+                        <div class="text-gray-800 font-semibold text-md text-center">Microsoft Account</div>
+                        <div class="text-gray-500 text-xs mt-1">Loading...</div>
                     </div>
                     
-                    <!-- Development Stage -->
-                    <div class="stage stage-active flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1">
-                        <div class="stage-node w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 text-white font-bold flex items-center justify-center shadow-lg mb-4">
+                    <!-- Software Accounts -->
+                    <div id="stage-software" class="stage flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1 flex-1">
+                        <div class="stage-node w-12 h-12 rounded-full bg-gray-400 text-white font-bold flex items-center justify-center shadow-lg mb-4">
                             3
                         </div>
-                        <div class="text-gray-800 font-semibold text-md text-center w-20">Development</div>
-                        <div class="text-gray-500 text-xs mt-1">In Progress</div>
+                        <div class="text-gray-800 font-semibold text-md text-center">Software Accounts</div>
+                        <div class="text-gray-500 text-xs mt-1">Loading...</div>
                     </div>
                     
-                    <!-- Testing Stage -->
-                    <div class="stage flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1">
+                    <!-- Equipment Ready -->
+                    <div id="stage-equipment" class="stage flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1 flex-1">
                         <div class="stage-node w-12 h-12 rounded-full bg-gray-400 text-white font-bold flex items-center justify-center shadow-lg mb-4">
                             4
                         </div>
-                        <div class="text-gray-800 font-semibold text-md text-center w-20">Testing</div>
-                        <div class="text-gray-500 text-xs mt-1">Aug 2025</div>
+                        <div class="text-gray-800 font-semibold text-md text-center">Equipment Ready</div>
+                        <div class="text-gray-500 text-xs mt-1">Loading...</div>
                     </div>
                     
-                    <!-- Launch Stage -->
-                    <div class="stage flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1">
+                    <!-- Start Date -->
+                    <div id="stage-start" class="stage flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1 flex-1">
                         <div class="stage-node w-12 h-12 rounded-full bg-gray-400 text-white font-bold flex items-center justify-center shadow-lg mb-4">
                             5
                         </div>
-                        <div class="text-gray-800 font-semibold text-md text-center w-20">Launch</div>
-                        <div class="text-gray-500 text-xs mt-1">Sep 2025</div>
+                        <div class="text-gray-800 font-semibold text-md text-center">Start Date</div>
+                        <div class="text-gray-500 text-xs mt-1">Loading...</div>
                     </div>
                 </div>
             </div>
@@ -265,42 +276,339 @@
                     </div>
                 </div>
             </div>
+                </div> <!-- Close timeline container -->
+            </div> <!-- Close flex layout -->
         </div>
 
-        <!-- Activity Section -->
+        <!-- Activity Section with Sidebar -->
         <div class="bg-gray-50 p-8 md:p-10">
-            <h2 class="text-center text-gray-800 text-xl md:text-2xl font-semibold mb-5">Recent Activity</h2>
-            
-            <div class="w-3/4 mx-auto">
-                <ul class="space-y-3 text-gray-700">
-                    <li class="activity-item">
-                        <strong class="text-gray-800">Sarah Martinez</strong> <span class="text-gray-500 text-sm">(2 hours ago)</span><br>
-                        Fixed critical bug in user authentication module. All login flows are now working correctly across all browsers.
-                    </li>
-                    <li class="activity-item">
-                        <strong class="text-gray-800">David Johnson</strong> <span class="text-gray-500 text-sm">(5 hours ago)</span><br>
-                        Updated API documentation with new endpoints. Added comprehensive examples for the payment integration module.
-                    </li>
-                    <li class="activity-item">
-                        <strong class="text-gray-800">Alex Liu</strong> <span class="text-gray-500 text-sm">(1 day ago)</span><br>
-                        Completed mobile responsive design for dashboard components. All screens now adapt perfectly to different device sizes.
-                    </li>
-                    <li class="activity-item">
-                        <strong class="text-gray-800">Maria Kim</strong> <span class="text-gray-500 text-sm">(2 days ago)</span><br>
-                        Performance optimization completed. Page load times reduced by 40% through code splitting and lazy loading implementation.
-                    </li>
-                    <li class="activity-item">
-                        <strong class="text-gray-800">Robert Chen</strong> <span class="text-gray-500 text-sm">(3 days ago)</span><br>
-                        Added automated testing suite for user interface components. Coverage increased to 85% with comprehensive unit tests.
-                    </li>
-                </ul>
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Contact Info Sidebar -->
+                <div class="lg:w-1/4">
+                    <!-- <div class="bg-white rounded-2xl p-6 shadow-sm"> -->
+                        <h2 class="text-gray-800 text-xl md:text-2xl font-semibold mb-5 mt-0">Contact Information</h2>
+                        <div class="space-y-3 text-sm">
+                            <div class="flex items-center">
+                                <span class="text-gray-600 w-14">Email:</span>
+                                <span id="employee-email" class="text-gray-800 cursor-pointer hover:bg-gray-100 px-1 rounded transition-colors" onclick="copyToClipboard(this)" title="Click to copy">Loading...</span>
+                            </div>
+                            <div class="flex items-center">
+                                <span class="text-gray-600 w-14">Phone:</span>
+                                <span id="employee-phone" class="text-gray-800 cursor-pointer hover:bg-gray-100 px-1 rounded transition-colors" onclick="copyToClipboard(this)" title="Click to copy">Loading...</span>
+                            </div>
+                            <div class="flex items-start">
+                                <span class="text-gray-600 w-14">Ship to:</span>
+                                <span id="employee-address" class="text-gray-800 cursor-pointer hover:bg-gray-100 px-1 rounded transition-colors" onclick="copyToClipboard(this)" title="Click to copy">Loading...</span>
+                            </div>
+                        </div>
+                    <!-- </div> -->
+                </div>
+                
+                <!-- Recent Activity -->
+                <div class="lg:w-3/4">
+                    <h2 class="text-gray-800 text-xl md:text-2xl font-semibold mb-5">Recent Activity</h2>
+                    <ul class="space-y-3 text-gray-700">
+                        <li class="activity-item">
+                            <strong class="text-gray-800">IT Team</strong> <span class="text-gray-500 text-sm">(2 hours ago)</span><br>
+                            MacBook Pro and monitor shipped via FedEx. Tracking: 1234567890. Expected delivery Jan 13.
+                        </li>
+                        <li class="activity-item">
+                            <strong class="text-gray-800">HR Team</strong> <span class="text-gray-500 text-sm">(1 day ago)</span><br>
+                            Google Workspace account created. Slack invite sent to adam.zebra@personal.com.
+                        </li>
+                        <li class="activity-item">
+                            <strong class="text-gray-800">Security Team</strong> <span class="text-gray-500 text-sm">(2 days ago)</span><br>
+                            Okta account provisioned. GitHub access configured with appropriate repository permissions.
+                        </li>
+                        <li class="activity-item">
+                            <strong class="text-gray-800">Hiring Manager</strong> <span class="text-gray-500 text-sm">(3 days ago)</span><br>
+                            New hire task created in Asana. Technology setup subtasks assigned to IT team.
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
+        // Global variables to store employee data
+        let currentEmployee = null;
+        let allEmployees = [];
+
+        // Function to get URL parameter
+        function getUrlParameter(name) {
+            name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
+            var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
+            var results = regex.exec(location.search);
+            return results === null ? '' : decodeURIComponent(results[1].replace(/\+/g, ' '));
+        }
+
+        // Function to format date
+        function formatDate(dateObj) {
+            if (!dateObj || !dateObj.date) return 'TBD';
+            const date = new Date(dateObj.date);
+            return date.toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'short', 
+                day: 'numeric' 
+            });
+        }
+
+        // Function to format phone number
+        function formatPhone(phone) {
+            if (!phone) return 'Not provided';
+            const cleaned = phone.toString().replace(/\D/g, '');
+            if (cleaned.length === 10) {
+                return `(${cleaned.slice(0,3)}) ${cleaned.slice(3,6)}-${cleaned.slice(6)}`;
+            }
+            return phone;
+        }
+
+        // Function to sort employees by start date
+        function sortEmployeesByStartDate(employees) {
+            return employees.sort((a, b) => {
+                const dateA = a.start_date && a.start_date.date ? new Date(a.start_date.date) : new Date('9999-12-31');
+                const dateB = b.start_date && b.start_date.date ? new Date(b.start_date.date) : new Date('9999-12-31');
+                return dateA - dateB;
+            });
+        }
+
+        // Function to populate employee selector
+        function populateEmployeeSelector(employees) {
+            const selectorEl = document.getElementById('employee-selector');
+            selectorEl.innerHTML = '';
+            
+            employees.forEach((employee, index) => {
+                const li = document.createElement('li');
+                li.className = `cursor-pointer px-3 py-2 rounded-full text-sm font-medium transition-all duration-200 ${
+                    currentEmployee && currentEmployee.name === employee.name 
+                        ? (employee.is_remote ? 'bg-green-500 text-white' : 'bg-blue-500 text-white')
+                        : 'bg-gray-200 text-gray-700 hover:bg-gray-300'
+                }`;
+                li.textContent = employee.name;
+                li.addEventListener('click', () => selectEmployee(employee));
+                selectorEl.appendChild(li);
+            });
+        }
+
+        // Function to select an employee
+        function selectEmployee(employee) {
+            currentEmployee = employee;
+            populateEmployeeData(employee);
+            populateEmployeeSelector(allEmployees); // Refresh selector to update active state
+            
+            // Update URL without page reload
+            const newUrl = new URL(window.location);
+            newUrl.searchParams.set('name', employee.name);
+            window.history.pushState({}, '', newUrl);
+        }
+
+        // Function to load employee data
+        async function loadEmployeeData() {
+            try {
+                // Check if we're running on a web server
+                if (window.location.protocol === 'file:') {
+                    throw new Error('Please run this page on a web server (not file://)');
+                }
+                
+                // Fetch data from API
+                const response = await fetch('get-onboarding-data.php');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const result = await response.json();
+                
+                if (!result.success) {
+                    throw new Error(result.error);
+                }
+                
+                // Sort employees by start date
+                allEmployees = sortEmployeesByStartDate(result.data);
+                
+                // Get employee name from URL parameter or default to first employee
+                const employeeName = getUrlParameter('name') || '';
+                let employee;
+                if (employeeName) {
+                    employee = allEmployees.find(emp => emp.name.toLowerCase() === employeeName.toLowerCase());
+                }
+                if (!employee && allEmployees.length > 0) {
+                    employee = allEmployees[0]; // Default to first employee (earliest start date)
+                }
+                
+                if (!employee) {
+                    throw new Error('No employee data found');
+                }
+                
+                currentEmployee = employee;
+                populateEmployeeData(employee);
+                populateEmployeeSelector(allEmployees);
+                
+            } catch (error) {
+                console.error('Error loading employee data:', error);
+                console.error('Full error details:', error);
+                showError('Failed to load employee data: ' + error.message);
+                document.getElementById('employee-selector').innerHTML = `<li class="text-center text-red-500 py-2 text-xs">Error: ${error.message}</li>`;
+            }
+        }
+
+        // Function to format completion date
+        function formatCompletionDate(dateString) {
+            if (!dateString) return 'Pending';
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', { 
+                month: 'short',
+                day: 'numeric'
+            });
+        }
+
+        // Function to update timeline node
+        function updateTimelineNode(id, status, completionDate) {
+            const node = document.getElementById(id);
+            const circle = node.querySelector('.stage-node');
+            const dateText = node.querySelector('.text-gray-500');
+            
+            if (status.completed) {
+                node.classList.add('stage-completed');
+                circle.classList.remove('bg-gray-400');
+                circle.classList.add('bg-gradient-to-br', 'from-green-500', 'to-green-600');
+                circle.innerHTML = '✓';
+                dateText.textContent = formatCompletionDate(status.completed_at);
+            } else {
+                node.classList.remove('stage-completed');
+                circle.classList.remove('bg-gradient-to-br', 'from-green-500', 'to-green-600');
+                circle.classList.add('bg-gray-400');
+                dateText.textContent = 'Pending';
+            }
+        }
+
+        // Function to calculate progress line width
+        function updateProgressLine() {
+            let lastCompletedIndex = -1;
+            const stages = document.querySelectorAll('.stage');
+            
+            // Find the last completed stage
+            stages.forEach((stage, index) => {
+                if (stage.classList.contains('stage-completed')) {
+                    lastCompletedIndex = index;
+                }
+            });
+            
+            // Calculate progress
+            if (lastCompletedIndex === -1) {
+                // No stages completed - show small progress for offer accepted
+                return '10%';
+            } else if (lastCompletedIndex === stages.length - 1) {
+                // All stages completed
+                return '100%';
+            } else {
+                // Calculate progress to halfway point of next incomplete stage
+                const totalStages = stages.length - 1; // number of gaps between stages
+                const completedStages = lastCompletedIndex;
+                const baseProgress = (completedStages / totalStages) * 100;
+                const incrementToNext = (1 / totalStages) * 100 * 0.5; // half distance to next stage
+                return `${baseProgress + incrementToNext}%`;
+            }
+        }
+
+        // Function to populate the page with employee data
+        function populateEmployeeData(employee) {
+            // Header information
+            document.getElementById('employee-name').textContent = employee.name;
+            document.getElementById('employee-position').textContent = employee.position || 'Position TBD';
+            
+            // Location badge with color coding
+            const locationElement = document.getElementById('employee-location');
+            const locationText = employee.is_remote ? `Remote (${employee.state})` : `On-site (${employee.state})`;
+            locationElement.textContent = locationText;
+            locationElement.className = `px-2 py-1 rounded text-sm ${employee.is_remote ? 'bg-green-500' : 'bg-blue-500'}`;
+            
+            document.getElementById('employee-start-date').textContent = formatDate(employee.start_date);
+            
+            // Contact information
+            document.getElementById('employee-email').textContent = employee.email || 'Not provided';
+            document.getElementById('employee-phone').textContent = formatPhone(employee.phone);
+            document.getElementById('employee-address').textContent = employee.shipping_address || 'Not provided';
+            
+            // Timeline nodes
+            const nodes = employee.timeline_nodes;
+            updateTimelineNode('stage-offer', nodes.offer_accepted);
+            updateTimelineNode('stage-microsoft', nodes.microsoft_account);
+            updateTimelineNode('stage-software', nodes.software_accounts);
+            updateTimelineNode('stage-equipment', nodes.equipment_ready);
+            
+            // Start date is special - show as complete if date has passed
+            const startNode = document.getElementById('stage-start');
+            const startCircle = startNode.querySelector('.stage-node');
+            const startDateText = startNode.querySelector('.text-gray-500');
+            
+            if (employee.start_date) {
+                const startDate = new Date(employee.start_date.date);
+                const today = new Date();
+                today.setHours(0, 0, 0, 0); // Compare dates only, not time
+                
+                if (startDate <= today) {
+                    // Start date has passed - show as complete
+                    startNode.classList.add('stage-completed');
+                    startCircle.classList.remove('bg-gray-400', 'bg-gradient-to-br', 'from-blue-500', 'to-blue-600');
+                    startCircle.classList.add('bg-gradient-to-br', 'from-green-500', 'to-green-600');
+                    startCircle.innerHTML = '✓';
+                } else {
+                    // Start date is in future - show as upcoming
+                    startCircle.classList.remove('bg-gray-400');
+                    startCircle.classList.add('bg-gradient-to-br', 'from-blue-500', 'to-blue-600');
+                }
+                startDateText.textContent = formatDate(employee.start_date);
+            } else {
+                startCircle.classList.add('bg-gray-400');
+                startCircle.classList.remove('bg-gradient-to-br', 'from-blue-500', 'to-blue-600', 'from-green-500', 'to-green-600');
+                startDateText.textContent = 'TBD';
+            }
+
+            // Update progress line
+            const progressBar = document.getElementById('progress-bar');
+            progressBar.style.width = updateProgressLine();
+        }
+
+        // Function to show error message
+        function showError(message) {
+            document.getElementById('employee-name').textContent = 'Error';
+            document.getElementById('employee-position').textContent = message;
+            document.getElementById('employee-location').textContent = 'Error';
+            document.getElementById('employee-start-date').textContent = 'Error';
+            document.getElementById('employee-email').textContent = 'Error loading data';
+            document.getElementById('employee-phone').textContent = 'Error loading data';
+            document.getElementById('employee-address').textContent = 'Error loading data';
+        }
+
+        // Copy to clipboard function
+        function copyToClipboard(element) {
+            // Get the text content, replacing <br> with spaces and cleaning up whitespace
+            // const text = element.textContent.replace(/\s+/g, ' ').trim();
+            const text = element.textContent;
+            
+            navigator.clipboard.writeText(text).then(function() {
+                // Show feedback
+                const originalHTML = element.innerHTML;
+                element.innerHTML = '✓ Copied!';
+                element.style.color = '#10b981'; // green-500
+                
+                setTimeout(function() {
+                    element.innerHTML = originalHTML;
+                    element.style.color = ''; // reset to original
+                }, 1500);
+            }).catch(function(err) {
+                // Fallback for older browsers
+                console.error('Could not copy text: ', err);
+                alert('Copied: ' + text);
+            });
+        }
+
         // Add interactive effects
         document.addEventListener('DOMContentLoaded', function() {
+            // Load employee data first
+            loadEmployeeData();
             // Animate activity items on scroll
             const observerOptions = {
                 threshold: 0.1,
