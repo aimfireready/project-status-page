@@ -485,8 +485,9 @@
 
         // Function to calculate progress line width
         function updateProgressLine() {
-            let lastCompletedIndex = -1;
-            const stages = document.querySelectorAll('.stage');
+                let lastCompletedIndex = -1;
+    // Only select stages in the desktop container to avoid counting mobile stages
+    const stages = document.querySelector('.hidden.md\\:block').querySelectorAll('.stage');
             
             // Find the last completed stage
             stages.forEach((stage, index) => {
@@ -495,21 +496,47 @@
                 }
             });
             
-            // Calculate progress
-            if (lastCompletedIndex === -1) {
-                // No stages completed - show small progress for offer accepted
-                return '10%';
-            } else if (lastCompletedIndex === stages.length - 1) {
-                // All stages completed
-                return '100%';
-            } else {
-                // Calculate progress to halfway point of next incomplete stage
-                const totalStages = stages.length - 1; // number of gaps between stages
-                const completedStages = lastCompletedIndex;
-                const baseProgress = (completedStages / totalStages) * 100;
-                const incrementToNext = (1 / totalStages) * 100 * 0.5; // half distance to next stage
-                return `${baseProgress + incrementToNext}%`;
-            }
+                // Calculate progress
+    console.log('Number of stages found:', stages.length);
+    console.log('Last completed stage index:', lastCompletedIndex);
+    
+    // Count how many stages are actually complete
+    let completeCount = 0;
+    stages.forEach(stage => {
+        if (stage.classList.contains('stage-completed')) {
+            completeCount++;
+        }
+    });
+    console.log('Actually completed stages:', completeCount);
+    
+    if (completeCount === stages.length) {
+        console.log('All stages are complete, returning 100%');
+        return '100%';
+    }
+    
+    if (lastCompletedIndex === -1) {
+        console.log('No stages completed, returning 10%');
+        return '10%';
+    }
+    
+    // Calculate progress to halfway point of next incomplete stage
+    const totalGaps = stages.length - 1; // gaps between stages
+    console.log('Total gaps between stages:', totalGaps);
+    
+    const completedGaps = lastCompletedIndex; // gaps completed
+    console.log('Completed gaps:', completedGaps);
+    
+    const baseProgress = (completedGaps / totalGaps) * 100;
+    console.log('Base progress:', baseProgress + '%');
+    
+    const gapSize = 100 / totalGaps;
+    const halfGap = gapSize * 0.5;
+    console.log('Size of half gap:', halfGap + '%');
+    
+    const finalProgress = Math.min(baseProgress + halfGap, 100);
+    console.log('Final progress:', finalProgress + '%');
+    
+    return `${finalProgress}%`;
         }
 
         // Function to populate the page with employee data
@@ -550,17 +577,19 @@
                 
                 if (startDate <= today) {
                     // Start date has passed - show as complete
-                    startNode.classList.add('stage-completed');
+                    startNode.classList.add('stage-completed'); // This class is needed for progress line calculation
                     startCircle.classList.remove('bg-gray-400', 'bg-gradient-to-br', 'from-blue-500', 'to-blue-600');
                     startCircle.classList.add('bg-gradient-to-br', 'from-green-500', 'to-green-600');
                     startCircle.innerHTML = '✓';
                 } else {
                     // Start date is in future - show as upcoming
+                    startNode.classList.remove('stage-completed'); // Remove completed class
                     startCircle.classList.remove('bg-gray-400');
                     startCircle.classList.add('bg-gradient-to-br', 'from-blue-500', 'to-blue-600');
                 }
                 startDateText.textContent = formatDate(employee.start_date);
             } else {
+                startNode.classList.remove('stage-completed'); // Remove completed class
                 startCircle.classList.add('bg-gray-400');
                 startCircle.classList.remove('bg-gradient-to-br', 'from-blue-500', 'to-blue-600', 'from-green-500', 'to-green-600');
                 startDateText.textContent = 'TBD';

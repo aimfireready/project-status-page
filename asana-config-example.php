@@ -9,7 +9,7 @@
 // Step 1: Get your Personal Access Token
 // Go to: https://app.asana.com/0/my-apps
 // Create a new Personal Access Token
-$ASANA_TOKEN = '2/1207982179459269/1211069721147361:74657db83b25b270396d287a59d5cae8';
+$ASANA_TOKEN = '2/123456789123123456789123/123456789123:asfm2io5784982mdflkbmldg23i489gbmslgslelk4245';
 
 // Step 2: Get your Project GID
 // Go to your Hiring project in Asana
