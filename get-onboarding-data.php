@@ -71,7 +71,7 @@ function getCustomFieldValue($task, $fieldGid) {
 try {
     // Function to get all subtasks recursively
     function getSubtasks($taskGid, $token) {
-        $subtasksUrl = "https://app.asana.com/api/1.0/tasks/$taskGid/subtasks?opt_fields=name,completed,completed_at,resource_subtype";
+        $subtasksUrl = "https://app.asana.com/api/1.0/tasks/$taskGid/subtasks?opt_fields=name,completed,completed_at,resource_subtype,gid";
         $subtasks = makeAsanaRequest($subtasksUrl, $token);
         
         $allSubtasks = [];
@@ -100,12 +100,19 @@ try {
                 if ($subtask['completed']) {
                     return [
                         'completed' => true,
-                        'completed_at' => $subtask['completed_at']
+                        'completed_at' => $subtask['completed_at'],
+                        'task_gid' => $subtask['gid']
+                    ];
+                } else {
+                    return [
+                        'completed' => false,
+                        'completed_at' => null,
+                        'task_gid' => $subtask['gid']
                     ];
                 }
             }
         }
-        return ['completed' => false, 'completed_at' => null];
+        return ['completed' => false, 'completed_at' => null, 'task_gid' => null];
     }
 
     // Step 2 & 3: Process each task
@@ -141,35 +148,64 @@ try {
             }
         }
 
-        // Check Microsoft Account (CIPP) status
+        // Check Microsoft Account status
         $msAccountStatus = findCompletedSubtask($subtasks, '/Create Microsoft user account/i');
         
         // Check Software Accounts status
-        $softwareStatus = findCompletedSubtask($subtasks, '/Add user to assigned apps/i');
+        $softwareStatus = findCompletedSubtask($subtasks, '/Add user to role-based apps/i');
         
-        // Check Equipment status
+        // Check Equipment status - BOTH laptop and peripherals must be complete
         $laptopStatus = findCompletedSubtask($subtasks, '/Deploy laptop/i');
-        $equipmentReady = $laptopStatus; // Simplify to just laptop for now
+        $peripheralsStatus = findCompletedSubtask($subtasks, '/Deploy peripherals/i');
+        
+        // Equipment is ready only if both laptop and peripherals are complete
+        $equipmentReady = [
+            'completed' => ($laptopStatus['completed'] && $peripheralsStatus['completed']),
+            'completed_at' => ($laptopStatus['completed'] && $peripheralsStatus['completed']) ? 
+                max($laptopStatus['completed_at'], $peripheralsStatus['completed_at']) : null,
+            'task_gid' => $laptopStatus['task_gid'] // Use laptop task as primary link
+        ];
         
         // Extract custom field values
+        $startDateField = getCustomFieldValue($taskDetail['data'], $CUSTOM_FIELDS['start_date']);
+        
+        // Check if Start Date is complete (date has passed)
+        $startDateCompleted = false;
+        $startDateCompletedAt = null;
+        if ($startDateField && isset($startDateField['date'])) {
+            $startDate = new DateTime($startDateField['date']);
+            $today = new DateTime();
+            $today->setTime(0, 0, 0); // Compare dates only, not time
+            $startDateCompleted = ($startDate <= $today);
+            if ($startDateCompleted) {
+                $startDateCompletedAt = $startDateField['date'];
+            }
+        }
+        
         $personData = [
             'name' => $name,
             'task_gid' => $task['gid'],
             'state' => getCustomFieldValue($taskDetail['data'], $CUSTOM_FIELDS['state']),
             'position' => getCustomFieldValue($taskDetail['data'], $CUSTOM_FIELDS['position']),
-            'start_date' => getCustomFieldValue($taskDetail['data'], $CUSTOM_FIELDS['start_date']),
+            'start_date' => $startDateField,
             'email' => getCustomFieldValue($taskDetail['data'], $CUSTOM_FIELDS['email']),
             'phone' => getCustomFieldValue($taskDetail['data'], $CUSTOM_FIELDS['phone']),
             'shipping_address' => getCustomFieldValue($taskDetail['data'], $CUSTOM_FIELDS['shipping_address']),
             'timeline_nodes' => [
                 'offer_accepted' => [
                     'completed' => true,
-                    'completed_at' => null // We don't have this info
+                    'completed_at' => null, // We don't have this info
+                    'task_gid' => $task['gid'] // Main onboarding task
                 ],
                 'microsoft_account' => $msAccountStatus,
                 'software_accounts' => $softwareStatus,
                 'equipment_ready' => $equipmentReady,
-                'start_date' => getCustomFieldValue($taskDetail['data'], $CUSTOM_FIELDS['start_date'])
+                'start_date' => [
+                    'completed' => $startDateCompleted,
+                    'completed_at' => $startDateCompletedAt,
+                    'task_gid' => $task['gid'],
+                    'date' => $startDateField
+                ]
             ]
         ];
         

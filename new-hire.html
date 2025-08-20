@@ -168,49 +168,49 @@
                 <!-- Stages -->
                 <div class="flex items-center relative z-10">
                     <!-- Offer Accepted -->
-                    <div id="stage-offer" class="stage flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1 flex-1">
+                    <a id="stage-offer" class="stage flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1 flex-1" href="#" target="_blank">
                         <div class="stage-node w-12 h-12 rounded-full bg-gray-400 text-white font-bold flex items-center justify-center shadow-lg mb-4">
                             1
                         </div>
                         <div class="text-gray-800 font-semibold text-md text-center">Offer Accepted</div>
                         <div class="text-gray-500 text-xs mt-1">Loading...</div>
-                    </div>
+                    </a>
                     
                     <!-- Microsoft Account -->
-                    <div id="stage-microsoft" class="stage flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1 flex-1">
+                    <a id="stage-microsoft" class="stage flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1 flex-1" href="#" target="_blank">
                         <div class="stage-node w-12 h-12 rounded-full bg-gray-400 text-white font-bold flex items-center justify-center shadow-lg mb-4">
                             2
                         </div>
                         <div class="text-gray-800 font-semibold text-md text-center">Microsoft Account</div>
                         <div class="text-gray-500 text-xs mt-1">Loading...</div>
-                    </div>
+                    </a>
                     
                     <!-- Software Accounts -->
-                    <div id="stage-software" class="stage flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1 flex-1">
+                    <a id="stage-software" class="stage flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1 flex-1" href="#" target="_blank">
                         <div class="stage-node w-12 h-12 rounded-full bg-gray-400 text-white font-bold flex items-center justify-center shadow-lg mb-4">
                             3
                         </div>
                         <div class="text-gray-800 font-semibold text-md text-center">Software Accounts</div>
                         <div class="text-gray-500 text-xs mt-1">Loading...</div>
-                    </div>
+                    </a>
                     
                     <!-- Equipment Ready -->
-                    <div id="stage-equipment" class="stage flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1 flex-1">
+                    <a id="stage-equipment" class="stage flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1 flex-1" href="#" target="_blank">
                         <div class="stage-node w-12 h-12 rounded-full bg-gray-400 text-white font-bold flex items-center justify-center shadow-lg mb-4">
                             4
                         </div>
                         <div class="text-gray-800 font-semibold text-md text-center">Equipment Ready</div>
                         <div class="text-gray-500 text-xs mt-1">Loading...</div>
-                    </div>
+                    </a>
                     
                     <!-- Start Date -->
-                    <div id="stage-start" class="stage flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1 flex-1">
+                    <a id="stage-start" class="stage flex flex-col items-center cursor-pointer transition-all duration-300 hover:-translate-y-1 flex-1" href="#" target="_blank">
                         <div class="stage-node w-12 h-12 rounded-full bg-gray-400 text-white font-bold flex items-center justify-center shadow-lg mb-4">
                             5
                         </div>
                         <div class="text-gray-800 font-semibold text-md text-center">Start Date</div>
                         <div class="text-gray-500 text-xs mt-1">Loading...</div>
-                    </div>
+                    </a>
                 </div>
             </div>
 
@@ -346,7 +346,9 @@
         // Function to format date
         function formatDate(dateObj) {
             if (!dateObj || !dateObj.date) return 'TBD';
-            const date = new Date(dateObj.date);
+            // Parse date as local time to avoid timezone issues
+            const [year, month, day] = dateObj.date.split('-').map(Number);
+            const date = new Date(year, month - 1, day); // month is 0-indexed
             return date.toLocaleDateString('en-US', { 
                 year: 'numeric', 
                 month: 'short', 
@@ -469,6 +471,11 @@
             const circle = node.querySelector('.stage-node');
             const dateText = node.querySelector('.text-gray-500');
             
+            // Update the href to point to the Asana task
+            if (status.task_gid) {
+                node.href = `https://app.asana.com/1/310361125310149/project/1177419685731755/task/${status.task_gid}`;
+            }
+            
             if (status.completed) {
                 node.classList.add('stage-completed');
                 circle.classList.remove('bg-gray-400');
@@ -479,15 +486,15 @@
                 node.classList.remove('stage-completed');
                 circle.classList.remove('bg-gradient-to-br', 'from-green-500', 'to-green-600');
                 circle.classList.add('bg-gray-400');
-                dateText.textContent = 'Pending';
+                // Show "Task missing" if no task_gid, otherwise show "Pending"
+                dateText.textContent = status.task_gid ? 'Pending' : 'Task missing';
             }
         }
 
         // Function to calculate progress line width
         function updateProgressLine() {
-                let lastCompletedIndex = -1;
-    // Only select stages in the desktop container to avoid counting mobile stages
-    const stages = document.querySelector('.hidden.md\\:block').querySelectorAll('.stage');
+            let lastCompletedIndex = -1;
+            const stages = document.querySelectorAll('.stage');
             
             // Find the last completed stage
             stages.forEach((stage, index) => {
@@ -496,47 +503,21 @@
                 }
             });
             
-                // Calculate progress
-    console.log('Number of stages found:', stages.length);
-    console.log('Last completed stage index:', lastCompletedIndex);
-    
-    // Count how many stages are actually complete
-    let completeCount = 0;
-    stages.forEach(stage => {
-        if (stage.classList.contains('stage-completed')) {
-            completeCount++;
-        }
-    });
-    console.log('Actually completed stages:', completeCount);
-    
-    if (completeCount === stages.length) {
-        console.log('All stages are complete, returning 100%');
-        return '100%';
-    }
-    
-    if (lastCompletedIndex === -1) {
-        console.log('No stages completed, returning 10%');
-        return '10%';
-    }
-    
-    // Calculate progress to halfway point of next incomplete stage
-    const totalGaps = stages.length - 1; // gaps between stages
-    console.log('Total gaps between stages:', totalGaps);
-    
-    const completedGaps = lastCompletedIndex; // gaps completed
-    console.log('Completed gaps:', completedGaps);
-    
-    const baseProgress = (completedGaps / totalGaps) * 100;
-    console.log('Base progress:', baseProgress + '%');
-    
-    const gapSize = 100 / totalGaps;
-    const halfGap = gapSize * 0.5;
-    console.log('Size of half gap:', halfGap + '%');
-    
-    const finalProgress = Math.min(baseProgress + halfGap, 100);
-    console.log('Final progress:', finalProgress + '%');
-    
-    return `${finalProgress}%`;
+            // Calculate progress
+            if (lastCompletedIndex === -1) {
+                // No stages completed - show small progress for offer accepted
+                return '10%';
+            } else if (lastCompletedIndex === stages.length - 1) {
+                // All stages completed
+                return '100%';
+            } else {
+                // Calculate progress to halfway point of next incomplete stage
+                const totalStages = stages.length - 1; // number of gaps between stages
+                const completedStages = lastCompletedIndex;
+                const baseProgress = (completedStages / totalStages) * 100;
+                const incrementToNext = (1 / totalStages) * 100 * 0.5; // half distance to next stage
+                return `${baseProgress + incrementToNext}%`;
+            }
         }
 
         // Function to populate the page with employee data
@@ -570,26 +551,29 @@
             const startCircle = startNode.querySelector('.stage-node');
             const startDateText = startNode.querySelector('.text-gray-500');
             
-            if (employee.start_date) {
-                const startDate = new Date(employee.start_date.date);
+            // Update the href for start date
+            if (nodes.start_date.task_gid) {
+                startNode.href = `https://app.asana.com/1/310361125310149/project/1177419685731755/task/${nodes.start_date.task_gid}`;
+            }
+            
+            if (nodes.start_date.date) {
+                const startDate = new Date(nodes.start_date.date.date);
                 const today = new Date();
                 today.setHours(0, 0, 0, 0); // Compare dates only, not time
                 
                 if (startDate <= today) {
                     // Start date has passed - show as complete
-                    startNode.classList.add('stage-completed'); // This class is needed for progress line calculation
+                    startNode.classList.add('stage-completed');
                     startCircle.classList.remove('bg-gray-400', 'bg-gradient-to-br', 'from-blue-500', 'to-blue-600');
                     startCircle.classList.add('bg-gradient-to-br', 'from-green-500', 'to-green-600');
                     startCircle.innerHTML = '✓';
                 } else {
                     // Start date is in future - show as upcoming
-                    startNode.classList.remove('stage-completed'); // Remove completed class
                     startCircle.classList.remove('bg-gray-400');
                     startCircle.classList.add('bg-gradient-to-br', 'from-blue-500', 'to-blue-600');
                 }
-                startDateText.textContent = formatDate(employee.start_date);
+                startDateText.textContent = formatDate(nodes.start_date.date);
             } else {
-                startNode.classList.remove('stage-completed'); // Remove completed class
                 startCircle.classList.add('bg-gray-400');
                 startCircle.classList.remove('bg-gradient-to-br', 'from-blue-500', 'to-blue-600', 'from-green-500', 'to-green-600');
                 startDateText.textContent = 'TBD';
@@ -659,7 +643,7 @@
 
             // Add click interaction to stages
             document.querySelectorAll('.stage').forEach(stage => {
-                stage.addEventListener('click', function() {
+                stage.addEventListener('click', function(e) {
                     const label = this.querySelector('.text-gray-800, .font-semibold').textContent;
                     console.log(`Clicked on stage: ${label}`);
                     
@@ -668,6 +652,12 @@
                     setTimeout(() => {
                         this.style.transform = '';
                     }, 200);
+                    
+                    // If no href or href is "#", prevent navigation
+                    if (!this.href || this.href === window.location.href + '#') {
+                        e.preventDefault();
+                        console.log('No Asana task link available for this stage');
+                    }
                 });
             });
 
